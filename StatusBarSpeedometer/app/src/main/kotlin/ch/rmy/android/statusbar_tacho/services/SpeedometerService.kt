@@ -19,6 +19,7 @@ import ch.rmy.android.statusbar_tacho.utils.Destroyer
 import ch.rmy.android.statusbar_tacho.utils.ScreenStateWatcher
 import ch.rmy.android.statusbar_tacho.utils.Settings
 import ch.rmy.android.statusbar_tacho.utils.SpeedFormatter
+import ch.rmy.android.statusbar_tacho.utils.VibrationManager
 import kotlinx.coroutines.*
 import kotlin.math.roundToInt
 
@@ -37,6 +38,9 @@ class SpeedometerService : Service() {
     }
     private val screenStateWatcher: ScreenStateWatcher by lazy {
         destroyer.own(ScreenStateWatcher(context))
+    }
+    private val vibrationManager by lazy {
+        VibrationManager(context)
     }
 
     private val settings: Settings
@@ -106,6 +110,10 @@ class SpeedometerService : Service() {
 
     private fun updateNotification(speedState: SpeedState) {
         val convertedSpeed = (speedState as? SpeedState.SpeedChanged)?.speed?.let(unit::convertSpeed) ?: 0.0f
+
+        if (convertedSpeed >= 20f) {
+            vibrationManager.vibrate(1000)
+        }
 
         val message = when (speedState) {
             is SpeedState.SpeedChanged -> SpeedFormatter.formatSpeed(context, convertedSpeed, unit)

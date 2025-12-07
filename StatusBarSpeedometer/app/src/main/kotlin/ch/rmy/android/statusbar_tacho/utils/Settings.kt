@@ -20,6 +20,7 @@ object Settings {
         _themeIdFlow.value = ThemeId.entries.getOrElse(preferences.getInt(PREF_THEME, 0)) { ThemeId.DEFAULT }
         _gaugeScaleFlow.value = GaugeScale.entries.getOrElse(preferences.getInt(PREF_GAUGE_SCALE, 0)) { GaugeScale.FAST }
         _topSpeedFlow.value = preferences.getFloat(PREF_TOP_SPEED, -1f).takeUnless { it == -1f }
+        _speedLimitFlow.value = preferences.getFloat(PREF_SPEED_LIMIT, 0f)
     }
 
     private lateinit var preferences: SharedPreferences
@@ -32,6 +33,7 @@ object Settings {
     private const val PREF_THEME = "theme"
     private const val PREF_GAUGE_SCALE = "gauge_scale"
     private const val PREF_TOP_SPEED = "top_speed"
+    private const val PREF_SPEED_LIMIT = "speed_limit"
 
     var isRunning: Boolean
         get() = _isRunningFlow.value
@@ -116,6 +118,18 @@ object Settings {
             } else {
                 remove(PREF_TOP_SPEED)
             }
+        }
+
+    private val _speedLimitFlow = MutableStateFlow(0f)
+
+    @Stable
+    val speedLimitFlow = _speedLimitFlow.asStateFlow()
+
+    var speedLimit: Float
+        get() = _speedLimitFlow.value
+        set(value) = preferences.edit {
+            _speedLimitFlow.value = value
+            putFloat(PREF_SPEED_LIMIT, value)
         }
 
     private val _permissionGrantedFlow = MutableStateFlow<Boolean?>(null)

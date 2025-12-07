@@ -34,6 +34,14 @@ class NotificationProvider(context: Context) {
             .setAction(DismissReceiver.DISMISS_ACTION)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // If a channel already exists but doesn't allow vibration or has lower-than-default importance,
+            // delete and recreate it so we can enable vibration and the desired importance.
+            val existingChannel = notificationManager.getNotificationChannel(CHANNEL_ID)
+            if (existingChannel != null) {
+                if (!existingChannel.shouldVibrate() || existingChannel.importance < NotificationManager.IMPORTANCE_DEFAULT) {
+                    notificationManager.deleteNotificationChannel(CHANNEL_ID)
+                }
+            }
             notificationManager.createNotificationChannel(createChannel(context))
         }
         val turnOffPendingIntent = PendingIntent.getBroadcast(context, 1, deleteIntent, pendingIntentFlags)
@@ -72,6 +80,15 @@ class NotificationProvider(context: Context) {
                     it
                 }
             }
+            // On pre-O devices, set a vibration pattern on the notification itself. On O+ the channel controls vibration.
+            .let {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                    @Suppress("DEPRECATION")
+                    it.setVibrate(VIBRATION_PATTERN)
+                } else {
+                    it
+                }
+            }
     }
 
     fun getInitialNotification(): Notification =
@@ -81,7 +98,7 @@ class NotificationProvider(context: Context) {
         val notification = builder
             .setContentText(message)
             .setSmallIcon(smallIcon)
-            .setOnlyAlertOnce(true)
+            .setOnlyAlertOnce(false) // allow vibration/alert on each update
             .build()
         notificationManager.notify(NOTIFICATION_ID, notification)
     }
@@ -91,11 +108,14 @@ class NotificationProvider(context: Context) {
         NotificationChannel(
             CHANNEL_ID,
             context.getString(R.string.notification_channel),
-            NotificationManager.IMPORTANCE_LOW
+            // Use DEFAULT importance so vibration is allowed by the channel
+            NotificationManager.IMPORTANCE_DEFAULT
         )
             .apply {
                 enableLights(false)
-                enableVibration(false)
+                enableVibration(true)
+                // Provide a vibration pattern (wait, vibrate, wait, vibrate)
+                setVibrationPattern(VIBRATION_PATTERN)
                 setShowBadge(false)
             }
 
@@ -103,6 +123,9 @@ class NotificationProvider(context: Context) {
 
         const val NOTIFICATION_ID = 1
         private const val CHANNEL_ID = "notification"
+
+        // Vibration pattern used for pre-O notifications and the channel on O+
+        private val VIBRATION_PATTERN = longArrayOf(0L, 250L, 100L, 250L)
 
     }
 
