@@ -113,9 +113,9 @@ class SpeedometerService : Service() {
     private fun updateNotification(speedState: SpeedState) {
         val convertedSpeed = (speedState as? SpeedState.SpeedChanged)?.speed?.let(unit::convertSpeed) ?: 0.0f
 
-        val thresholdFirst  = 25.0f;
-        val thresholdSecond = 45.0f;
-        val thresholdThird  = 55.0f;
+        val thresholdFirst  = 3.0f
+        val thresholdSecond = 45.0f
+        val thresholdThird  = 55.0f
 
         if (convertedSpeed in thresholdFirst..thresholdSecond) {
             vibrationManager.vibrate(2000 , 50)

@@ -59,6 +59,7 @@ class NotificationProvider(context: Context) {
             .setDeleteIntent(turnOffPendingIntent)
             .setLocalOnly(true)
             .setOngoing(true)
+            .setOnlyAlertOnce(true)
             .let {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     it.addAction(
@@ -98,7 +99,6 @@ class NotificationProvider(context: Context) {
         val notification = builder
             .setContentText(message)
             .setSmallIcon(smallIcon)
-            .setOnlyAlertOnce(false) // allow vibration/alert on each update
             .build()
         notificationManager.notify(NOTIFICATION_ID, notification)
     }
