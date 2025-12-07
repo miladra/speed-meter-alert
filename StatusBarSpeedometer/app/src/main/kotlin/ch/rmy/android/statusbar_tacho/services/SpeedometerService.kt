@@ -110,8 +110,7 @@ class SpeedometerService : Service() {
             .ownedBy(destroyer)
     }
 
-    private fun updateNotification(speedState: SpeedState) {
-        val convertedSpeed = (speedState as? SpeedState.SpeedChanged)?.speed?.let(unit::convertSpeed) ?: 0.0f
+    private fun updateVibration(convertedSpeed: Float) {
 
         val thresholdFirst  = 3.0f
         val thresholdSecond = 45.0f
@@ -124,6 +123,9 @@ class SpeedometerService : Service() {
         } else if (convertedSpeed >= thresholdThird + 1){
             vibrationManager.vibrate(2000 , 200)
         }
+    }
+    private fun updateNotification(speedState: SpeedState) {
+        val convertedSpeed = (speedState as? SpeedState.SpeedChanged)?.speed?.let(unit::convertSpeed) ?: 0.0f
 
         val message = when (speedState) {
             is SpeedState.SpeedChanged -> SpeedFormatter.formatSpeed(context, convertedSpeed, unit)
@@ -136,6 +138,7 @@ class SpeedometerService : Service() {
             is SpeedState.SpeedChanged -> iconProvider.getIconForNumber(convertedSpeed.roundToInt())
             else -> R.drawable.icon_unknown
         }
+        updateVibration(convertedSpeed)
         notificationProvider.updateNotification(message, iconRes)
     }
 
