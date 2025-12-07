@@ -30,6 +30,11 @@ class SpeedWatcher(context: Context) : Destroyable {
         }
     private var lastGpsUpdate = 0L
 
+    // Keep the last received location and its timestamp so we can compute
+    // speed when the Location doesn't provide it via hasSpeed()/getSpeed().
+    private var lastLocation: Location? = null
+    private var lastLocationElapsedRealtime: Long = 0L
+
     private var enabled: Boolean = false
         set(value) {
             field = value
@@ -44,7 +49,28 @@ class SpeedWatcher(context: Context) : Destroyable {
 
     private val gpsLocationListener = object : LocationListenerCompat {
         override fun onLocationChanged(location: Location) {
-            currentSpeed = location.speed
+            // Prefer the provider's speed value when available
+            val speedFromLocation: Float? = if (location.hasSpeed()) {
+                location.speed
+            } else {
+                // Fallback: compute speed from last location and elapsed realtime
+                val last = lastLocation
+                val deltaMillis = SystemClock.elapsedRealtime() - lastLocationElapsedRealtime
+                if (last != null && deltaMillis > 0) {
+                    val distanceMeters = last.distanceTo(location)
+                    distanceMeters / (deltaMillis / 1000f)
+                } else {
+                    null
+                }
+            }
+
+            currentSpeed = speedFromLocation
+
+            // Update last location/timestamp for future fallback computations
+            lastLocation = Location(location)
+            lastLocationElapsedRealtime = SystemClock.elapsedRealtime()
+
+            // Mark that GPS provided a recent update
             lastGpsUpdate = SystemClock.elapsedRealtime()
         }
 
@@ -59,8 +85,25 @@ class SpeedWatcher(context: Context) : Destroyable {
     }
 
     private val fusedLocationListener = LocationListenerCompat { location ->
-        if (currentSpeed == null || SystemClock.elapsedRealtime() - lastGpsUpdate > 10000) {
-            currentSpeed = location.speed
+        val now = SystemClock.elapsedRealtime()
+        if (currentSpeed == null || now - lastGpsUpdate > 10000) {
+            val speedFromLocation: Float? = if (location.hasSpeed()) {
+                location.speed
+            } else {
+                val last = lastLocation
+                val deltaMillis = now - lastLocationElapsedRealtime
+                if (last != null && deltaMillis > 0) {
+                    val distanceMeters = last.distanceTo(location)
+                    distanceMeters / (deltaMillis / 1000f)
+                } else {
+                    null
+                }
+            }
+            if (speedFromLocation != null) {
+                currentSpeed = speedFromLocation
+            }
+            lastLocation = Location(location)
+            lastLocationElapsedRealtime = now
         }
     }
 

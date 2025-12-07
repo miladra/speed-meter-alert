@@ -61,12 +61,7 @@ object Settings {
             putString(PREF_SPEED_UNIT, value.name)
         }
 
-    private fun getDefaultUnit() =
-        if (Locale.current.toLanguageTag() == "en-US") {
-            SpeedUnit.MILES_PER_HOUR
-        } else {
-            SpeedUnit.KILOMETERS_PER_HOUR
-        }
+    private fun getDefaultUnit() = SpeedUnit.KILOMETERS_PER_HOUR
 
     var isFirstRun: Boolean
         get() = preferences.getBoolean(PREF_FIRST_RUN, true)

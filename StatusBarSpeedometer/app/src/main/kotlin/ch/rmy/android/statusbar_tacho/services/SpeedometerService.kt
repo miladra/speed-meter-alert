@@ -20,7 +20,9 @@ import ch.rmy.android.statusbar_tacho.utils.ScreenStateWatcher
 import ch.rmy.android.statusbar_tacho.utils.Settings
 import ch.rmy.android.statusbar_tacho.utils.SpeedFormatter
 import ch.rmy.android.statusbar_tacho.utils.VibrationManager
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 class SpeedometerService : Service() {
@@ -111,8 +113,16 @@ class SpeedometerService : Service() {
     private fun updateNotification(speedState: SpeedState) {
         val convertedSpeed = (speedState as? SpeedState.SpeedChanged)?.speed?.let(unit::convertSpeed) ?: 0.0f
 
-        if (convertedSpeed >= 20f) {
-            vibrationManager.vibrate(1000)
+        val thresholdFirst  = 0.0f;
+        val thresholdSecond = 45.0f;
+        val thresholdThird  = 55.0f;
+
+        if (convertedSpeed in thresholdFirst..thresholdSecond) {
+            vibrationManager.vibrate(2000 , 10)
+        } else if (convertedSpeed in thresholdSecond +1 ..thresholdThird){
+            vibrationManager.vibrate(2000 , 50)
+        } else if (convertedSpeed >= thresholdThird + 1){
+            vibrationManager.vibrate(2000 , 100)
         }
 
         val message = when (speedState) {
