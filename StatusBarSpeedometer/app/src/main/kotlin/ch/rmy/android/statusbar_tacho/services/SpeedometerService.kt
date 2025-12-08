@@ -139,13 +139,13 @@ class SpeedometerService : Service() {
         val thresholdFirst  = 27.0f
         val thresholdSecond = 47.0f
         val thresholdThird  = 57.0f
-        val uperLevel = 8.0F;
+        val upperLevel = 8.0F;
 
-        if (speed in thresholdFirst..(thresholdFirst + uperLevel)) {
+        if (speed in thresholdFirst..(thresholdFirst + upperLevel)) {
             vibrationManager.vibrate(2000 , 50)
-        } else if (speed in thresholdSecond  ..(thresholdSecond + uperLevel)){
+        } else if (speed in thresholdSecond  ..(thresholdSecond + upperLevel)){
             vibrationManager.vibrate(2000 , 150)
-        } else if (speed in thresholdThird  ..(thresholdThird + uperLevel)){
+        } else if (speed in thresholdThird  ..(thresholdThird + upperLevel)){
             vibrationManager.vibrate(2000 , 200)
         }
     }
