@@ -1,6 +1,5 @@
 package ch.rmy.android.statusbar_tacho.activities
 
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -37,6 +37,7 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.text
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ch.rmy.android.statusbar_tacho.R
@@ -51,10 +52,16 @@ fun SettingsDialog(
     themeId: ThemeId,
     gaugeScale: GaugeScale,
     runWhenScreenOff: Boolean,
+    vibrationThreshold1: Int,
+    vibrationThreshold2: Int,
+    vibrationThreshold3: Int,
     onSpeedUnitChanged: (SpeedUnit) -> Unit,
     onThemeIdChanged: (ThemeId) -> Unit,
     onGaugeScaleChanged: (GaugeScale) -> Unit,
     onRunWhenScreenOffChanged: (Boolean) -> Unit,
+    onVibrationThreshold1Changed: (Int) -> Unit,
+    onVibrationThreshold2Changed: (Int) -> Unit,
+    onVibrationThreshold3Changed: (Int) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     AlertDialog(
@@ -93,8 +100,39 @@ fun SettingsDialog(
                     runWhenScreenOff = runWhenScreenOff,
                     onRunWhenScreenOffChanged = onRunWhenScreenOffChanged,
                 )
+
+                VibrationThresholds(vibrationThreshold1, vibrationThreshold2, vibrationThreshold3, onVibrationThreshold1Changed, onVibrationThreshold2Changed, onVibrationThreshold3Changed)
             }
         }
+    )
+}
+
+@Composable
+private fun VibrationThresholds(
+    vibrationThreshold1: Int,
+    vibrationThreshold2: Int,
+    vibrationThreshold3: Int,
+    onVibrationThreshold1Changed: (Int) -> Unit,
+    onVibrationThreshold2Changed: (Int) -> Unit,
+    onVibrationThreshold3Changed: (Int) -> Unit
+) {
+    OutlinedTextField(
+        value = vibrationThreshold1.toString(),
+        onValueChange = { onVibrationThreshold1Changed(it.toIntOrNull() ?: 0) },
+        label = { Text("Vibration Threshold 1") },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+    )
+    OutlinedTextField(
+        value = vibrationThreshold2.toString(),
+        onValueChange = { onVibrationThreshold2Changed(it.toIntOrNull() ?: 0) },
+        label = { Text("Vibration Threshold 2") },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+    )
+    OutlinedTextField(
+        value = vibrationThreshold3.toString(),
+        onValueChange = { onVibrationThreshold3Changed(it.toIntOrNull() ?: 0) },
+        label = { Text("Vibration Threshold 3") },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
     )
 }
 
@@ -285,10 +323,16 @@ private fun SettingsDialog_Preview() {
         themeId = ThemeId.DEFAULT,
         gaugeScale = GaugeScale.FAST,
         runWhenScreenOff = false,
+        vibrationThreshold1 = 0,
+        vibrationThreshold2 = 0,
+        vibrationThreshold3 = 0,
         onSpeedUnitChanged = {},
         onThemeIdChanged = {},
         onGaugeScaleChanged = {},
         onRunWhenScreenOffChanged = {},
+        onVibrationThreshold1Changed = {},
+        onVibrationThreshold2Changed = {},
+        onVibrationThreshold3Changed = {},
         onDismissRequest = {},
     )
 }

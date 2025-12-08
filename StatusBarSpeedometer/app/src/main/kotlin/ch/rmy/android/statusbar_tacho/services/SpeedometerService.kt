@@ -130,23 +130,18 @@ class SpeedometerService : Service() {
     }
 
     private fun updateVibration(speed: Float) {
-        // val now = System.currentTimeMillis()
-        // if (now - lastVibrationTime < 5000) {
-        //     return
-        // }
-        // lastVibrationTime = now
 
-        val thresholdFirst  = 27.0f
-        val thresholdSecond = 47.0f
-        val thresholdThird  = 57.0f
-        val upperLevel = 8.0F;
+        val thresholdFirst = settings.vibrationThreshold1.toFloat()
+        val thresholdSecond = settings.vibrationThreshold2.toFloat()
+        val thresholdThird = settings.vibrationThreshold3.toFloat()
+        val speedInterval = 8.0F;
 
-        if (speed in thresholdFirst..(thresholdFirst + upperLevel)) {
-            vibrationManager.vibrate(2000 , 50)
-        } else if (speed in thresholdSecond  ..(thresholdSecond + upperLevel)){
-            vibrationManager.vibrate(2000 , 150)
-        } else if (speed in thresholdThird  ..(thresholdThird + upperLevel)){
-            vibrationManager.vibrate(2000 , 200)
+        if (speed in thresholdFirst..(thresholdFirst + speedInterval)) {
+            vibrationManager.vibrate(2000, 50)
+        } else if (speed in thresholdSecond..(thresholdSecond + speedInterval)) {
+            vibrationManager.vibrate(2000, 150)
+        } else if (speed in thresholdThird..(thresholdThird + speedInterval)) {
+            vibrationManager.vibrate(2000, 200)
         }
     }
 

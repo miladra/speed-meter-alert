@@ -21,6 +21,9 @@ object Settings {
         _gaugeScaleFlow.value = GaugeScale.entries.getOrElse(preferences.getInt(PREF_GAUGE_SCALE, 0)) { GaugeScale.FAST }
         _topSpeedFlow.value = preferences.getFloat(PREF_TOP_SPEED, -1f).takeUnless { it == -1f }
         _speedLimitFlow.value = preferences.getFloat(PREF_SPEED_LIMIT, 0f)
+        _vibrationThreshold1Flow.value = preferences.getInt(PREF_VIBRATION_THRESHOLD_1, 27)
+        _vibrationThreshold2Flow.value = preferences.getInt(PREF_VIBRATION_THRESHOLD_2, 47)
+        _vibrationThreshold3Flow.value = preferences.getInt(PREF_VIBRATION_THRESHOLD_3, 57)
     }
 
     private lateinit var preferences: SharedPreferences
@@ -34,6 +37,9 @@ object Settings {
     private const val PREF_GAUGE_SCALE = "gauge_scale"
     private const val PREF_TOP_SPEED = "top_speed"
     private const val PREF_SPEED_LIMIT = "speed_limit"
+    private const val PREF_VIBRATION_THRESHOLD_1 = "vibration_threshold_1"
+    private const val PREF_VIBRATION_THRESHOLD_2 = "vibration_threshold_2"
+    private const val PREF_VIBRATION_THRESHOLD_3 = "vibration_threshold_3"
 
     var isRunning: Boolean
         get() = _isRunningFlow.value
@@ -125,6 +131,42 @@ object Settings {
         set(value) = preferences.edit {
             _speedLimitFlow.value = value
             putFloat(PREF_SPEED_LIMIT, value)
+        }
+
+    private val _vibrationThreshold1Flow = MutableStateFlow(0)
+
+    @Stable
+    val vibrationThreshold1Flow = _vibrationThreshold1Flow.asStateFlow()
+
+    var vibrationThreshold1: Int
+        get() = _vibrationThreshold1Flow.value
+        set(value) = preferences.edit {
+            _vibrationThreshold1Flow.value = value
+            putInt(PREF_VIBRATION_THRESHOLD_1, value)
+        }
+
+    private val _vibrationThreshold2Flow = MutableStateFlow(0)
+
+    @Stable
+    val vibrationThreshold2Flow = _vibrationThreshold2Flow.asStateFlow()
+
+    var vibrationThreshold2: Int
+        get() = _vibrationThreshold2Flow.value
+        set(value) = preferences.edit {
+            _vibrationThreshold2Flow.value = value
+            putInt(PREF_VIBRATION_THRESHOLD_2, value)
+        }
+
+    private val _vibrationThreshold3Flow = MutableStateFlow(0)
+
+    @Stable
+    val vibrationThreshold3Flow = _vibrationThreshold3Flow.asStateFlow()
+
+    var vibrationThreshold3: Int
+        get() = _vibrationThreshold3Flow.value
+        set(value) = preferences.edit {
+            _vibrationThreshold3Flow.value = value
+            putInt(PREF_VIBRATION_THRESHOLD_3, value)
         }
 
     private val _permissionGrantedFlow = MutableStateFlow<Boolean?>(null)

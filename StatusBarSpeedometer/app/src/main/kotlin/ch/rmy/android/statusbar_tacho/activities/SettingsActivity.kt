@@ -56,6 +56,9 @@ class SettingsActivity : AppCompatActivity() {
     private val _themeId = settings.themeIdFlow
     private val _gaugeScale = settings.gaugeScaleFlow
     private val _permissionGranted = settings.permissionGrantedFlow
+    private val _vibrationThreshold1 = settings.vibrationThreshold1Flow
+    private val _vibrationThreshold2 = settings.vibrationThreshold2Flow
+    private val _vibrationThreshold3 = settings.vibrationThreshold3Flow
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -96,6 +99,9 @@ class SettingsActivity : AppCompatActivity() {
             val themeId by _themeId.collectAsStateWithLifecycle()
             val gaugeScale by _gaugeScale.collectAsStateWithLifecycle()
             val permissionGranted by _permissionGranted.collectAsStateWithLifecycle()
+            val vibrationThreshold1 by _vibrationThreshold1.collectAsStateWithLifecycle()
+            val vibrationThreshold2 by _vibrationThreshold2.collectAsStateWithLifecycle()
+            val vibrationThreshold3 by _vibrationThreshold3.collectAsStateWithLifecycle()
 
             var modal by remember {
                 mutableStateOf(if (settings.isFirstRun) Modal.WELCOME else null)
@@ -196,6 +202,9 @@ class SettingsActivity : AppCompatActivity() {
                             themeId = themeId,
                             gaugeScale = gaugeScale,
                             runWhenScreenOff = runWhenScreenOff,
+                            vibrationThreshold1 = vibrationThreshold1,
+                            vibrationThreshold2 = vibrationThreshold2,
+                            vibrationThreshold3 = vibrationThreshold3,
                             onSpeedUnitChanged = {
                                 settings.unit = it
                             },
@@ -208,6 +217,15 @@ class SettingsActivity : AppCompatActivity() {
                             onRunWhenScreenOffChanged = {
                                 _runWhenScreenOff.value = it
                                 Settings.shouldKeepUpdatingWhileScreenIsOff = it
+                            },
+                            onVibrationThreshold1Changed = {
+                                settings.vibrationThreshold1 = it
+                            },
+                            onVibrationThreshold2Changed = {
+                                settings.vibrationThreshold2 = it
+                            },
+                            onVibrationThreshold3Changed = {
+                                settings.vibrationThreshold3 = it
                             },
                             onDismissRequest = {
                                 modal = null
