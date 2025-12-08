@@ -136,15 +136,16 @@ class SpeedometerService : Service() {
         // }
         // lastVibrationTime = now
 
-        val thresholdFirst  = 25.0f
-        val thresholdSecond = 45.0f
-        val thresholdThird  = 55.0f
+        val thresholdFirst  = 27.0f
+        val thresholdSecond = 47.0f
+        val thresholdThird  = 57.0f
+        val uperLevel = 8.0F;
 
-        if (speed in thresholdFirst..(thresholdFirst + 10)) {
+        if (speed in thresholdFirst..(thresholdFirst + uperLevel)) {
             vibrationManager.vibrate(2000 , 50)
-        } else if (speed in thresholdSecond  ..(thresholdSecond + 10)){
+        } else if (speed in thresholdSecond  ..(thresholdSecond + uperLevel)){
             vibrationManager.vibrate(2000 , 150)
-        } else if (speed in thresholdThird  ..(thresholdThird + 10)){
+        } else if (speed in thresholdThird  ..(thresholdThird + uperLevel)){
             vibrationManager.vibrate(2000 , 200)
         }
     }
