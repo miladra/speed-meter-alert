@@ -55,6 +55,7 @@ fun SettingsDialog(
     vibrationThreshold1: Int,
     vibrationThreshold2: Int,
     vibrationThreshold3: Int,
+    speedInterval: Int,
     onSpeedUnitChanged: (SpeedUnit) -> Unit,
     onThemeIdChanged: (ThemeId) -> Unit,
     onGaugeScaleChanged: (GaugeScale) -> Unit,
@@ -62,6 +63,7 @@ fun SettingsDialog(
     onVibrationThreshold1Changed: (Int) -> Unit,
     onVibrationThreshold2Changed: (Int) -> Unit,
     onVibrationThreshold3Changed: (Int) -> Unit,
+    onSpeedIntervalChanged: (Int) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     AlertDialog(
@@ -102,6 +104,13 @@ fun SettingsDialog(
                 )
 
                 VibrationThresholds(vibrationThreshold1, vibrationThreshold2, vibrationThreshold3, onVibrationThreshold1Changed, onVibrationThreshold2Changed, onVibrationThreshold3Changed)
+
+                OutlinedTextField(
+                    value = speedInterval.toString(),
+                    onValueChange = { onSpeedIntervalChanged(it.toIntOrNull() ?: 0) },
+                    label = { Text("Speed Interval") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                )
             }
         }
     )
@@ -326,6 +335,7 @@ private fun SettingsDialog_Preview() {
         vibrationThreshold1 = 0,
         vibrationThreshold2 = 0,
         vibrationThreshold3 = 0,
+        speedInterval = 8,
         onSpeedUnitChanged = {},
         onThemeIdChanged = {},
         onGaugeScaleChanged = {},
@@ -333,6 +343,7 @@ private fun SettingsDialog_Preview() {
         onVibrationThreshold1Changed = {},
         onVibrationThreshold2Changed = {},
         onVibrationThreshold3Changed = {},
+        onSpeedIntervalChanged = {},
         onDismissRequest = {},
     )
 }

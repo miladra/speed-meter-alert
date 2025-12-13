@@ -134,7 +134,7 @@ class SpeedometerService : Service() {
         val thresholdFirst = settings.vibrationThreshold1.toFloat()
         val thresholdSecond = settings.vibrationThreshold2.toFloat()
         val thresholdThird = settings.vibrationThreshold3.toFloat()
-        val speedInterval = 8.0F;
+        val speedInterval = settings.speedInterval.toFloat()
 
         if (speed in thresholdFirst..(thresholdFirst + speedInterval)) {
             vibrationManager.vibrate(2000, 50)

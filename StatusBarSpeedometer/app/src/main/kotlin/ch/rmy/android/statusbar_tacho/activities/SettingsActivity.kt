@@ -59,6 +59,7 @@ class SettingsActivity : AppCompatActivity() {
     private val _vibrationThreshold1 = settings.vibrationThreshold1Flow
     private val _vibrationThreshold2 = settings.vibrationThreshold2Flow
     private val _vibrationThreshold3 = settings.vibrationThreshold3Flow
+    private val _speedInterval = settings.speedIntervalFlow
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -102,6 +103,7 @@ class SettingsActivity : AppCompatActivity() {
             val vibrationThreshold1 by _vibrationThreshold1.collectAsStateWithLifecycle()
             val vibrationThreshold2 by _vibrationThreshold2.collectAsStateWithLifecycle()
             val vibrationThreshold3 by _vibrationThreshold3.collectAsStateWithLifecycle()
+            val speedInterval by _speedInterval.collectAsStateWithLifecycle()
 
             var modal by remember {
                 mutableStateOf(if (settings.isFirstRun) Modal.WELCOME else null)
@@ -205,6 +207,7 @@ class SettingsActivity : AppCompatActivity() {
                             vibrationThreshold1 = vibrationThreshold1,
                             vibrationThreshold2 = vibrationThreshold2,
                             vibrationThreshold3 = vibrationThreshold3,
+                            speedInterval = speedInterval,
                             onSpeedUnitChanged = {
                                 settings.unit = it
                             },
@@ -226,6 +229,9 @@ class SettingsActivity : AppCompatActivity() {
                             },
                             onVibrationThreshold3Changed = {
                                 settings.vibrationThreshold3 = it
+                            },
+                            onSpeedIntervalChanged = {
+                                settings.speedInterval = it
                             },
                             onDismissRequest = {
                                 modal = null
