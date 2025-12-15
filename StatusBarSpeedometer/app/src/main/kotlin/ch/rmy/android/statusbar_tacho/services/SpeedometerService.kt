@@ -145,15 +145,15 @@ class SpeedometerService : Service() {
 
         when (speed) {
             in thresholdFirst..(thresholdFirst + speedInterval) -> {
-                vibrationManager.vibrate(vibrationDuration, vibrationAmplitude)
+                vibrationManager.vibrate(vibrationDuration, (vibrationAmplitude).coerceIn(1, 255))
                 lastVibrationTime = currentTime
             }
             in thresholdSecond..(thresholdSecond + speedInterval) -> {
-                vibrationManager.vibrate(vibrationDuration, (vibrationAmplitude * 2))
+                vibrationManager.vibrate(vibrationDuration, (vibrationAmplitude * 2).coerceIn(1, 255))
                 lastVibrationTime = currentTime
             }
             in thresholdThird..(thresholdThird + speedInterval) -> {
-                vibrationManager.vibrate(vibrationDuration, (vibrationAmplitude * 3))
+                vibrationManager.vibrate(vibrationDuration, (vibrationAmplitude * 3).coerceIn(1, 255))
                 lastVibrationTime = currentTime
             }
         }
