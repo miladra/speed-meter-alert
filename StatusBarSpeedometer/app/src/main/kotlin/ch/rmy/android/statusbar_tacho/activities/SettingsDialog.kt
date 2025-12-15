@@ -56,6 +56,8 @@ fun SettingsDialog(
     vibrationThreshold2: Int,
     vibrationThreshold3: Int,
     speedInterval: Int,
+    vibrationDuration: Int,
+    vibrationAmplitude: Int,
     onSpeedUnitChanged: (SpeedUnit) -> Unit,
     onThemeIdChanged: (ThemeId) -> Unit,
     onGaugeScaleChanged: (GaugeScale) -> Unit,
@@ -64,6 +66,8 @@ fun SettingsDialog(
     onVibrationThreshold2Changed: (Int) -> Unit,
     onVibrationThreshold3Changed: (Int) -> Unit,
     onSpeedIntervalChanged: (Int) -> Unit,
+    onVibrationDurationChanged: (Int) -> Unit,
+    onVibrationAmplitudeChanged: (Int) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     AlertDialog(
@@ -109,6 +113,20 @@ fun SettingsDialog(
                     value = speedInterval.toString(),
                     onValueChange = { onSpeedIntervalChanged(it.toIntOrNull() ?: 0) },
                     label = { Text("Speed Interval") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                )
+
+                OutlinedTextField(
+                    value = vibrationDuration.toString(),
+                    onValueChange = { onVibrationDurationChanged(it.toIntOrNull() ?: 0) },
+                    label = { Text("Vibration Duration") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                )
+
+                OutlinedTextField(
+                    value = vibrationAmplitude.toString(),
+                    onValueChange = { onVibrationAmplitudeChanged(it.toIntOrNull() ?: 0) },
+                    label = { Text("Vibration Amplitude") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 )
             }
@@ -332,10 +350,12 @@ private fun SettingsDialog_Preview() {
         themeId = ThemeId.DEFAULT,
         gaugeScale = GaugeScale.FAST,
         runWhenScreenOff = false,
-        vibrationThreshold1 = 0,
-        vibrationThreshold2 = 0,
-        vibrationThreshold3 = 0,
+        vibrationThreshold1 = 27,
+        vibrationThreshold2 = 47,
+        vibrationThreshold3 = 57,
         speedInterval = 8,
+        vibrationDuration = 2000,
+        vibrationAmplitude = 50,
         onSpeedUnitChanged = {},
         onThemeIdChanged = {},
         onGaugeScaleChanged = {},
@@ -344,6 +364,8 @@ private fun SettingsDialog_Preview() {
         onVibrationThreshold2Changed = {},
         onVibrationThreshold3Changed = {},
         onSpeedIntervalChanged = {},
+        onVibrationDurationChanged = {},
+        onVibrationAmplitudeChanged = {},
         onDismissRequest = {},
     )
 }

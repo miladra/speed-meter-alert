@@ -60,6 +60,8 @@ class SettingsActivity : AppCompatActivity() {
     private val _vibrationThreshold2 = settings.vibrationThreshold2Flow
     private val _vibrationThreshold3 = settings.vibrationThreshold3Flow
     private val _speedInterval = settings.speedIntervalFlow
+    private val _vibrationDuration = settings.vibrationDurationFlow
+    private val _vibrationAmplitude = settings.vibrationAmplitudeFlow
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -104,6 +106,8 @@ class SettingsActivity : AppCompatActivity() {
             val vibrationThreshold2 by _vibrationThreshold2.collectAsStateWithLifecycle()
             val vibrationThreshold3 by _vibrationThreshold3.collectAsStateWithLifecycle()
             val speedInterval by _speedInterval.collectAsStateWithLifecycle()
+            val vibrationDuration by _vibrationDuration.collectAsStateWithLifecycle()
+            val vibrationAmplitude by _vibrationAmplitude.collectAsStateWithLifecycle()
 
             var modal by remember {
                 mutableStateOf(if (settings.isFirstRun) Modal.WELCOME else null)
@@ -208,6 +212,8 @@ class SettingsActivity : AppCompatActivity() {
                             vibrationThreshold2 = vibrationThreshold2,
                             vibrationThreshold3 = vibrationThreshold3,
                             speedInterval = speedInterval,
+                            vibrationDuration = vibrationDuration,
+                            vibrationAmplitude = vibrationAmplitude,
                             onSpeedUnitChanged = {
                                 settings.unit = it
                             },
@@ -232,6 +238,12 @@ class SettingsActivity : AppCompatActivity() {
                             },
                             onSpeedIntervalChanged = {
                                 settings.speedInterval = it
+                            },
+                            onVibrationDurationChanged = {
+                                settings.vibrationDuration = it
+                            },
+                            onVibrationAmplitudeChanged = {
+                                settings.vibrationAmplitude = it
                             },
                             onDismissRequest = {
                                 modal = null

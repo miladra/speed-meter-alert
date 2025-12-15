@@ -25,6 +25,8 @@ object Settings {
         _vibrationThreshold2Flow.value = preferences.getInt(PREF_VIBRATION_THRESHOLD_2, 47)
         _vibrationThreshold3Flow.value = preferences.getInt(PREF_VIBRATION_THRESHOLD_3, 57)
         _speedIntervalFlow.value = preferences.getInt(PREF_SPEED_INTERVAL, 8)
+        _vibrationDurationFlow.value = preferences.getInt(PREF_VIBRATION_DURATION, 2000)
+        _vibrationAmplitudeFlow.value = preferences.getInt(PREF_VIBRATION_AMPLITUDE, 50)
     }
 
     private lateinit var preferences: SharedPreferences
@@ -42,6 +44,8 @@ object Settings {
     private const val PREF_VIBRATION_THRESHOLD_2 = "vibration_threshold_2"
     private const val PREF_VIBRATION_THRESHOLD_3 = "vibration_threshold_3"
     private const val PREF_SPEED_INTERVAL = "speed_interval"
+    private const val PREF_VIBRATION_DURATION = "vibration_duration"
+    private const val PREF_VIBRATION_AMPLITUDE = "vibration_amplitude"
 
     var isRunning: Boolean
         get() = _isRunningFlow.value
@@ -181,6 +185,30 @@ object Settings {
         set(value) = preferences.edit {
             _speedIntervalFlow.value = value
             putInt(PREF_SPEED_INTERVAL, value)
+        }
+
+    private val _vibrationDurationFlow = MutableStateFlow(2000)
+
+    @Stable
+    val vibrationDurationFlow = _vibrationDurationFlow.asStateFlow()
+
+    var vibrationDuration: Int
+        get() = _vibrationDurationFlow.value
+        set(value) = preferences.edit {
+            _vibrationDurationFlow.value = value
+            putInt(PREF_VIBRATION_DURATION, value)
+        }
+
+    private val _vibrationAmplitudeFlow = MutableStateFlow(50)
+
+    @Stable
+    val vibrationAmplitudeFlow = _vibrationAmplitudeFlow.asStateFlow()
+
+    var vibrationAmplitude: Int
+        get() = _vibrationAmplitudeFlow.value
+        set(value) = preferences.edit {
+            _vibrationAmplitudeFlow.value = value
+            putInt(PREF_VIBRATION_AMPLITUDE, value)
         }
 
     private val _permissionGrantedFlow = MutableStateFlow<Boolean?>(null)
